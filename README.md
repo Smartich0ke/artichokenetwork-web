@@ -1,2 +1,2 @@
 # Landing Page
-# just a super simplre landing page for my self hosted stuff
+Just a super simple landing page for my self hosted stuff

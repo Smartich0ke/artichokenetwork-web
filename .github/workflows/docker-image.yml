@@ -36,7 +36,7 @@ jobs:
         
       - name: Build and Push
         run: |
-          docker build -t ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE_NAME }}:latest -t ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE_NAME }}:$(date +%d-%m-%Y) .
+          docker build . --file Dockerfile --tag ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE_NAME }}:latest --tag ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE_NAME }}:$(date +%d-%m-%Y)
           docker push ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE_NAME }} --all-tags 
 
       - name: Sign the Docker Image with Latest Tag

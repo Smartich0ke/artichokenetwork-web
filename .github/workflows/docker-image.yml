@@ -1,0 +1,42 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+  COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+  DOCKER_REGISTRY_URL: harbor.artichokenetwork.com
+  DOCKER_REPO: landing
+  DOCKER_IMAGE_NAME: web
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3.1.1
+
+      - name: Login to Docker Registry
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ env.DOCKER_REGISTRY_URL }} -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      - name: Build and Push
+        run: |
+          docker build -t ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE_NAME }}:latest -t ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE_NAME }}:$(date +%d-%m-%Y)
+          docker push ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE_NAME }} --all-tags 
+
+      - name: Sign the Docker Image with Latest Tag
+        run: cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE_NAME }}:latest
+
+      - name: Sign the Docker Image with Build Tag
+        run: cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${{ env.DOCKER_REGISTRY_URL }}/${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE_NAME }}:$(date +%d-%m-%Y)
+

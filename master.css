@@ -1,0 +1,58 @@
+@font-face {
+    font-family: 'Fira Code';
+    src: url('fonts/FiraCode-Regular.ttf'); /* Make sure the path is correct */
+}
+@font-face {
+    font-family: 'Fira Code Bold';
+    src: url('fonts/FiraCode-Bold.ttf');
+}
+
+body {
+    color: #FAEBD7;
+    background-color: #2e2b2b;
+    font-family: 'Fira Code', monospace; /* Fallback to monospace if 'Fira Code' is not available */
+    margin: 0; /* Remove default margin */
+}
+
+a {
+    color: #FAEBD7;
+    text-decoration: none; /* Optional: removes underline from links */
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.links-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center; /* Center align text for all child elements */
+    margin-left: 3rem;
+    margin-right: 3rem;
+}
+
+.link-item {
+    margin: 10px 0; /* Adjust the space between link items */
+}
+
+.link-label {
+  font-family: Fira code Bold;
+}
+
+@media only screen and (max-width: 600px) {
+    .link-item {
+        display: flex;
+        flex-direction: column;
+    }
+}
+#disclaimer-text {
+    max-width: 600px;
+    font-size: 0.9rem;
+}
+#disclaimer-link {
+    font-size: 0.9rem;
+    margin-top: 1rem;
+}
